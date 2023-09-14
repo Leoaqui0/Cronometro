@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cronômetro</title>
+</head>
+<body>
+  <h1>Cronômetro</h1>
+  <p id="cronometro">0:00</p>
+  <p>Clique em qualquer lugar para começar a cronometrar.</p>
+
+  <script>
+    let startTime;
+    let intervalId;
+    const cronometroElement = document.getElementById('cronometro');
+    const tempoLimite = 1 * 60 + 15; // 1 minuto e 15 segundos em segundos
+
+    document.addEventListener('click', () => {
+      if (!startTime) {
+        startTime = Date.now() / 1000; // Converte para segundos
+        intervalId = setInterval(atualizarCronometro, 1000);
+      } else {
+        clearInterval(intervalId);
+        startTime = null;
+        cronometroElement.textContent = '0:00'; // Reinicia o cronômetro
+      }
+    });
+
+    function atualizarCronometro() {
+      const currentTime = Date.now() / 1000; // Converte para segundos
+      const elapsedTime = currentTime - startTime;
+
+      if (elapsedTime >= tempoLimite) {
+        clearInterval(intervalId);
+        startTime = null;
+        cronometroElement.textContent = '1:15'; // Exibe o tempo limite quando atingido
+      } else {
+        const minutes = Math.floor(elapsedTime / 60);
+        const seconds = Math.floor(elapsedTime % 60);
+        cronometroElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      }
+    }
+  </script>
+</body>
+</html>
